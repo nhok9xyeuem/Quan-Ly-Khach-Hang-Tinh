@@ -1,8 +1,9 @@
 package manager;
 
-import manager.repository.ProvinceRepository;
-import manager.repository.impl.ProvinceRepositoryImpl;
+import manager.fomater.CustomerFomater;
+import manager.service.CustomerService;
 import manager.service.ProvinceService;
+import manager.service.impl.CustomerServiceImpl;
 import manager.service.impl.ProvinceServiceImpl;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -11,6 +12,9 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.format.FormatterRegistry;
+import org.springframework.format.number.CurrencyStyleFormatter;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
@@ -22,6 +26,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.spring4.SpringTemplateEngine;
+
 import org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -30,7 +35,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.util.Properties;
-
+//Chú thích để kích hoạt kho JPA
+@EnableJpaRepositories("manager.repository")
 @Configuration
 @EnableWebMvc
 @EnableTransactionManagement
@@ -44,15 +50,14 @@ public class ApplicationConfig extends WebMvcConfigurerAdapter implements Applic
         this.applicationContext = applicationContext;
     }
 
-    @Bean
-    public ProvinceRepository provinceRepository(){
-        return new ProvinceRepositoryImpl();
-    }
+@Bean
 
-    @Bean
-    public ProvinceService provinceService(){
-        return new ProvinceServiceImpl();
-    }
+public CustomerService customerService(){
+        return new CustomerServiceImpl();
+}
+@Bean
+public ProvinceService provinceService(){return new ProvinceServiceImpl();
+}
 
 
     //Thymeleaf Configuration
@@ -68,6 +73,7 @@ public class ApplicationConfig extends WebMvcConfigurerAdapter implements Applic
 
     @Bean
     public TemplateEngine templateEngine(){
+
         TemplateEngine templateEngine = new SpringTemplateEngine();
         templateEngine.setTemplateResolver(templateResolver());
         return templateEngine;
@@ -92,12 +98,12 @@ public class ApplicationConfig extends WebMvcConfigurerAdapter implements Applic
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource());
         em.setPackagesToScan(new String[]{"manager.model"});
-
         JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         em.setJpaVendorAdapter(vendorAdapter);
         em.setJpaProperties(additionalProperties());
         return em;
     }
+
 
     @Bean
     public DataSource dataSource(){
@@ -123,5 +129,10 @@ public class ApplicationConfig extends WebMvcConfigurerAdapter implements Applic
         return properties;
     }
 
+
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        registry.addFormatter(new CustomerFomater(applicationContext.getBean(ProvinceService.class)));
+    }
 
 }

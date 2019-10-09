@@ -1,10 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>$Title$</title>
+    <title>Title</title>
 </head>
 <body>
-$END$
+<form th:action="@{/customer/update}" th:object="${customer}" method="post">
+        <td><input type="hidden" th:field="*{id}"></td>
+    <table border="1px">
+    <tr>
+        <td><input type="text" th:field="*{firstName}"></td>
+    </tr>
+    <tr>
+        <td><input type="text" th:field="*{lastName}"></td>
+    </tr>
+    <tr>
+        <td><select th:field="*{province}">
+            <option th:each="provin : ${province}" th:value="${provin.id}" th:text="${provin.nameProvince}"></option>
+        </select></td>
+    </tr>
+        <tr>
+            <td><input type="submit" value="Update"></td>
+        </tr>
+    </table>
+</form>
 </body>
 </html>

@@ -1,4 +1,10 @@
 package manager.repository;
 
-public interface ProvinceRepository {
+
+import manager.model.Province;
+
+import org.springframework.data.repository.PagingAndSortingRepository;
+
+public interface ProvinceRepository extends PagingAndSortingRepository<Province,Long> {
+
 }

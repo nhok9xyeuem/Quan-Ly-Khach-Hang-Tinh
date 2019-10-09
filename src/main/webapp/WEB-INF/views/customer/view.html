@@ -1,10 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>$Title$</title>
+    <title>Title</title>
 </head>
 <body>
-$END$
+<table border="1px">
+    <tr>
+        <th>Name</th>
+        <td th:text="${customers.firstName} + ${customers.lastName}"></td>
+    </tr>
+    <tr>
+        <th>Province</th>
+        <td th:text="${customers.province.nameProvince}"></td>
+    </tr>
+</table>
+<a th:href="@{/update/__${customers.id}__}">edit</a> | <a th:href="@{/delete/__${customers.id}__}">delete</a>
 </body>
 </html>
