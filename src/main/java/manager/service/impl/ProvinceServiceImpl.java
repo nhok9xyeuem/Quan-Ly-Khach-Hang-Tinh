@@ -4,6 +4,8 @@ import manager.model.Province;
 import manager.repository.ProvinceRepository;
 import manager.service.ProvinceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public class ProvinceServiceImpl implements ProvinceService {
     @Autowired

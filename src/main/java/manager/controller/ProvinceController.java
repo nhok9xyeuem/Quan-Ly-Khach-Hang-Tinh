@@ -5,6 +5,8 @@ import manager.model.Province;
 import manager.service.CustomerService;
 import manager.service.ProvinceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -18,8 +20,8 @@ public class ProvinceController {
     private CustomerService customerService;
 
     @ModelAttribute("customer")
-    public Iterable<Customer> customers() {
-        return customerService.findAll();
+    public Page<Customer> customers(Pageable pageable) {
+        return customerService.findAll(pageable);
     }
 
     @GetMapping("/province")
@@ -72,8 +74,8 @@ public class ProvinceController {
     }
 
     @PostMapping("/delete-province")
-    public ModelAndView deleteProvince(@RequestParam Long id, RedirectAttributes redirectAttributes) {
-        provinceService.remove(id);
+    public ModelAndView deleteProvince(@ModelAttribute ("province") Province province, RedirectAttributes redirectAttributes) {
+        provinceService.remove(province.getId());
         ModelAndView modelAndView = new ModelAndView("redirect:/province");
         redirectAttributes.addFlashAttribute("message", "Delete Finish");
         return modelAndView;

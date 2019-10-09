@@ -5,6 +5,9 @@
     <title>Title</title>
 </head>
 <body>
+<hr>
+<a th:href="@{/view/__${customer.id}__}">Back view Customer</a>
+<hr>
 <form th:action="@{/customer/delete}" th:object="${customer}" method="post">
     <td><input type="hidden" th:value="${id}" th:field="*{id}"></td>
     <table border="1px">
