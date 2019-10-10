@@ -1,9 +1,11 @@
 package manager.service;
 
 import manager.model.Province;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface ProvinceService {
-    Iterable<Province> findAll();
+    Page<Province> findAll(Pageable pageable);
 
     Province findById(Long id);
 
